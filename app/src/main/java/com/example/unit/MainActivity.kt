@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -61,6 +61,13 @@ fun UnitConvertor(){
     var iExpanded by remember {mutableStateOf(false)}
     var oExpanded by remember {mutableStateOf(false)}
     val conversionFactor = remember{ mutableStateOf(0.00) }
+    var result by remember { mutableStateOf(0.00) }
+
+    fun conversion(conversionFactor: Double){
+        result = ((inValue.toDouble()*conversionFactor*10000).toInt()).toDouble()/1000
+
+
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -69,107 +76,113 @@ fun UnitConvertor(){
     ) {
         Text(text = "Unit Convertor")
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(value = inValue, 
-            onValueChange = {inValue=it},
-            label = { Text(text = "Enter value")}
-            )
-        Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(value = inValue, onValueChange = {inValue=it
+                 conversion(conversionFactor.value)})
+            Spacer(modifier = Modifier.height(16.dp))
         Row {
-            
-            Box{
-                Button(onClick = { iExpanded=true }) {
-                    if(inUnit==""){
+
+            Box {
+                Button(onClick = { iExpanded = true }) {
+                    if (inUnit == "") {
                         Text(text = "Select")
                         Icon(Icons.Default.ArrowDropDown, contentDescription = "")
-                    }else{
+                    } else {
                         Text(inUnit)
                     }
                 }
-                DropdownMenu(expanded = iExpanded, onDismissRequest = { iExpanded=false }) {
+                DropdownMenu(expanded = iExpanded, onDismissRequest = { iExpanded = false }) {
                     DropdownMenuItem(
                         text = { Text(text = "Centimeters") },
                         onClick = {
-                            inUnit="Centimeter"
-                            iExpanded=false
-                            conversionFactor.value=100.00
+                            inUnit = "Centimeter"
+                            iExpanded = false
+                            conversionFactor.value = 100.00
+                            conversion(conversionFactor.value)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Meters") },
                         onClick = {
-                            inUnit="Meters"
-                            iExpanded=false
-                            conversionFactor.value=1.00
+                            inUnit = "Meters"
+                            iExpanded = false
+                            conversionFactor.value = 1.00
+                            conversion(conversionFactor.value)
                         })
                     DropdownMenuItem(
                         text = { Text(text = "Feet") },
                         onClick = {
-                            inUnit="Feet"
-                            iExpanded=false
-                            conversionFactor.value=3.28084
+                            inUnit = "Feet"
+                            iExpanded = false
+                            conversionFactor.value = 3.28084
+                            conversion(conversionFactor.value)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Millimeters") },
                         onClick = {
-                            inUnit="Millimeters"
-                            iExpanded=false
-                            conversionFactor.value=1000.00
+                            inUnit = "Millimeters"
+                            iExpanded = false
+                            conversionFactor.value = 1000.00
+                            conversion(conversionFactor.value)
+
                         }
                     )
 
                 }
             }
-            
+
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Box {
-                Button(onClick = { oExpanded=true }) {
-                    if(outUnit==""){
+                Button(onClick = { oExpanded = true }) {
+                    if (outUnit == "") {
                         Text(text = "Select")
                         Icon(Icons.Default.ArrowDropDown, contentDescription = "")
-                    }else{
+                    } else {
                         Text(outUnit)
                     }
                 }
-                DropdownMenu(expanded = oExpanded, onDismissRequest = { oExpanded=false }) {
+                DropdownMenu(expanded = oExpanded, onDismissRequest = { oExpanded = false }) {
                     DropdownMenuItem(
                         text = { Text(text = "Centimeters") },
                         onClick = {
-                            outUnit="Centimeter"
-                            oExpanded=false
-                            conversionFactor.value=100/conversionFactor.value
+                            outUnit = "Centimeter"
+                            oExpanded = false
+                            conversionFactor.value = 100 / conversionFactor.value
+                            conversion(conversionFactor.value)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Meters") },
                         onClick = {
-                            outUnit="Meters"
-                            oExpanded=false
-                            conversionFactor.value=1/conversionFactor.value
+                            outUnit = "Meters"
+                            oExpanded = false
+                            conversionFactor.value = 1 / conversionFactor.value
+                            conversion(conversionFactor.value)
                         })
                     DropdownMenuItem(
                         text = { Text(text = "Feet") },
                         onClick = {
-                            outUnit="Feet"
-                            oExpanded=false
-                            conversionFactor.value=3.28084/conversionFactor.value
+                            outUnit = "Feet"
+                            oExpanded = false
+                            conversionFactor.value = 3.28084 / conversionFactor.value
+                            conversion(conversionFactor.value)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Millimeters") },
                         onClick = {
-                            outUnit="Millimeters"
-                            oExpanded=false
-                            conversionFactor.value=1000/conversionFactor.value
+                            outUnit = "Millimeters"
+                            oExpanded = false
+                            conversionFactor.value = 1000 / conversionFactor.value
+                            conversion(conversionFactor.value)
                         }
                     )
 
                 }
             }
-
-            }
-
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         val context = LocalContext.current
@@ -180,10 +193,19 @@ fun UnitConvertor(){
         }) {
             Text(text = "Click Me!!")
         }
-        OutlinedTextField(value = outValue ,
-            onValueChange = {outValue=it},
-            label = { Text(text = "Answer")}
-            )
+        
+        Spacer(modifier = Modifier.height(18.dp))
+        
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center) {
+                Text(text = "Result : $result")
+        }
+        
+        Spacer(modifier = Modifier.height(18.dp))
+        
+        Row(modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.Center) {
+            Text(text = "Result : $outValue")
+        }
     }
 }
 
